@@ -33,7 +33,8 @@ form.addEventListener('submit',async event=>{
     html=html.replace('PHOTO+name','ASSET_MAP[PHOTO+name]');
     html=html.replace('assets/pixel/${name}.png',"${ASSET_MAP['assets/pixel/'+name+'.png']}");
     for(const name of ['assets/fonts/GeistPixel.ttf','assets/catatan-impian.jpg','assets/kartu-cita-cita.jpg','assets/kolase-web.png'])html=html.replaceAll(name,urls[name]);
-    frame.src=URL.createObjectURL(new Blob([html],{type:'text/html'}));frame.hidden=false;document.getElementById('login').hidden=true;password.value='';
+    html=html.replace("history.replaceState(null,'',`#${index+1}`)","try{history.replaceState(null,'',`#${index+1}`)}catch{}");
+    frame.srcdoc=html;frame.hidden=false;document.getElementById('login').hidden=true;password.value='';
   }catch(error){message.textContent=error.message==='download'?'Presentasi belum bisa dimuat. Coba lagi.':'Password salah atau presentasi belum bisa dibuka.';password.select()}
   finally{button.disabled=false}
 });
