@@ -23,7 +23,7 @@ document.addEventListener('keydown',event=>{
 form.addEventListener('submit',async event=>{
   event.preventDefault();button.disabled=true;message.textContent='Membuka presentasi...';
   try{
-    if(!encrypted){const response=await fetch('payload.bin?v=perkenalan2');if(!response.ok)throw new Error('download');encrypted=new Uint8Array(await response.arrayBuffer())}
+    if(!encrypted){const response=await fetch('payload.bin?v=mapres-lemma');if(!response.ok)throw new Error('download');encrypted=new Uint8Array(await response.arrayBuffer())}
     const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password.value),'PBKDF2',false,['deriveKey']);
     const key=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:encrypted.slice(0,16),iterations:600000},material,{name:'AES-GCM',length:256},false,['decrypt']);
     const decrypted=await crypto.subtle.decrypt({name:'AES-GCM',iv:encrypted.slice(16,28)},key,encrypted.slice(28));
@@ -38,7 +38,7 @@ form.addEventListener('submit',async event=>{
     let html=archive.html.replace("const PHOTO='assets/webphotos/';",`const PHOTO='assets/webphotos/';const ASSET_MAP=${JSON.stringify(urls)};`);
     html=html.replace('PHOTO+name','ASSET_MAP[PHOTO+name]');
     html=html.replace('assets/pixel/${name}.png',"${ASSET_MAP['assets/pixel/'+name+'.png']}");
-    for(const name of ['assets/fonts/GeistPixel.ttf','assets/catatan-impian.jpg','assets/kartu-cita-cita.jpg','assets/kolase-web.png','assets/kenallebih-logo.webp','assets/kenallebih-web.webp','assets/sorot-ai-web.webp','assets/mapres-2025.jpg','assets/dzakwan-profil.jpg','assets/portcities-logo.png','assets/lemma-logo.svg'])html=html.replaceAll(name,urls[name]);
+    for(const name of ['assets/fonts/GeistPixel.ttf','assets/catatan-impian.jpg','assets/kartu-cita-cita.jpg','assets/kolase-web.png','assets/kenallebih-logo.webp','assets/kenallebih-web.webp','assets/sorot-ai-web.webp','assets/mapres-2025.jpg','assets/dzakwan-profil.jpg','assets/portcities-logo.png','assets/lemma-logo.png'])html=html.replaceAll(name,urls[name]);
     html=html.replace("history.replaceState(null,'',`#${index+1}`)","try{history.replaceState(null,'',`#${index+1}`)}catch{}");
     frame.onload=()=>frame.contentWindow.focus();frame.srcdoc=html;frame.hidden=false;document.getElementById('login').hidden=true;password.value='';
   }catch(error){message.textContent=error.message==='download'?'Presentasi belum bisa dimuat. Coba lagi.':'Password salah atau presentasi belum bisa dibuka.';password.select()}
